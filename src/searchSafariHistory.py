@@ -2,37 +2,48 @@
 # encoding: utf-8
 
 import sys
-from workflow import Workflow, ICON_WEB, ICON_WARNING
+from workflow import Workflow3, ICON_WEB, ICON_WARNING
 
 import sqlite3
-from os.path import expanduser
+import os
 from datetime import datetime
 
-UPDATE_SETTINGS = {'github_slug': 'deanishe/alfred-reddit'}
-HELP_URL = 'https://github.com/deanishe/alfred-reddit'
+__author__ = 'rx2130'
+__version__ = '1.0'
 
-sql = '''
-SELECT title, url, visit_time + 978307200
-FROM history_visits AS v
-INNER JOIN history_items AS i
-ON v.history_item = i.id
-WHERE title <> '' AND (title LIKE ? OR url LIKE ?)
-ORDER BY visit_time DESC
-LIMIT 20
-'''
+UPDATE_SETTINGS = {
+    'github_slug': 'rx2130/alfred-safari-history-searchs',
+    'version': __version__,
+    'frequency': 7
+}
+HELP_URL = 'https://github.com/rx2130/alfred-safari-history-search'
+ICON_UPDATE = os.path.join(os.path.dirname(__file__), 'update-available.png')
+PATH = os.path.expanduser('~/Library/Safari/History.db')
+HISTORY_LIMIT = 20
 
 
-def searchSafariHistory(query):
-    path = expanduser('~/Library/Safari/History.db')
-    con = sqlite3.connect(path)
+def searchSafariHistory(args):
+    sql, query = searchPatternCmd(args)
 
-    keyword = '%' + query + '%'
-    pattern = (keyword, keyword, )
+    with sqlite3.connect(PATH) as con:
+        for r in con.execute(sql, query):
+            yield r
 
-    with con:
-        cur = con.cursor()
-        cur.execute(sql, pattern)
-        return cur.fetchall()
+
+def searchPatternCmd(args):
+    query = [u'%{}%'.format(w) for w in args.split(' ') if w]
+
+    sql = '''
+    SELECT title, url, visit_time + 978307200, title || ' ' || url AS s
+    FROM history_visits AS v
+    INNER JOIN history_items AS i
+    ON v.history_item = i.id
+    WHERE title <> '' {}
+    ORDER BY visit_time DESC
+    LIMIT {}
+    '''.format('AND s LIKE ? ' * len(query), HISTORY_LIMIT)
+
+    return sql, query
 
 
 def timeBeautify(time):
@@ -47,26 +58,36 @@ def timeBeautify(time):
 
 
 def main(wf):
+    # workflow update
+    if wf.update_available:
+        wf.add_item(
+            'A newer version is available',
+            '↩ to install update',
+            autocomplete='workflow:update',
+            icon=ICON_UPDATE)
+
+    # search history
     args = wf.args[0]
     history = searchSafariHistory(args)
 
-    if not history:
-        wf.add_item('No history found', icon=ICON_WARNING)
-        wf.send_feedback()
-        return
-
+    r = None
     for r in history:
-        title, url, time = r
+        title, url, time, _ = r
+        time = timeBeautify(time)
         wf.add_item(
-            title=title,
-            subtitle=timeBeautify(time) + url,
+            title,
+            time + url,
             arg=url,
             valid=True,
-            icon=ICON_WEB)
+            icon=ICON_WEB,
+            copytext=url,
+            largetext=u'{}\n{}\n{}'.format(title, url, time))
+    if r is None:
+        wf.add_item('No history found', icon=ICON_WARNING)
 
     wf.send_feedback()
 
 
 if __name__ == '__main__':
-    wf = Workflow()
+    wf = Workflow3(help_url=HELP_URL, update_settings=UPDATE_SETTINGS)
     sys.exit(wf.run(main))

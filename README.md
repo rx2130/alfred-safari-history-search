@@ -12,7 +12,7 @@ Demo
 Download
 --------
 
-Get Reddit for Alfred from [GitHub][gh-releases].
+Get Alfred Safari History Search from [GitHub][gh-releases].
 
 
 Usage
@@ -20,6 +20,7 @@ Usage
 
 - `hsi` — Show list of recent 20 Safari browse history
 - `hsi <query>` — Search for history matching `<query>`
+- `cmd c` - Copy link URL
 
 
 Licensing, thanks etc.
