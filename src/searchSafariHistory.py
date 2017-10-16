@@ -12,7 +12,7 @@ __author__ = 'rx2130'
 __version__ = '1.0'
 
 UPDATE_SETTINGS = {
-    'github_slug': 'rx2130/alfred-safari-history-searchs',
+    'github_slug': 'rx2130/alfred-safari-history-search',
     'version': __version__,
     'frequency': 7
 }
@@ -67,11 +67,8 @@ def main(wf):
             icon=ICON_UPDATE)
 
     # search history
-    args = wf.args[0]
-    history = searchSafariHistory(args)
-
     r = None
-    for r in history:
+    for r in searchSafariHistory(wf.args[0]):
         title, url, time, _ = r
         time = timeBeautify(time)
         wf.add_item(

@@ -20,7 +20,10 @@ Usage
 
 - `hsi` — Show list of recent 20 Safari browse history
 - `hsi <query>` — Search for history matching `<query>`
-- `cmd c` - Copy link URL
+  - `↩` or `⌘+NUM` — Open URL in browser
+  - `⇧` or `⌘+Y` — Show Quick Look preview of URL
+  - `⌘+L` — Show full title, URL, browse date in Alfred's Large Type window
+  - `⌘+C` - Copy link URL
 
 
 Licensing, thanks etc.
