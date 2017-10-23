@@ -1,7 +1,7 @@
 Alfred Safari History Search
 =================
 
-Search Safari browse history from Alfred.
+Search Safari browse history from Alfred. Support Sierra and High Sierra. (Earlier os untested)
 
 Demo
 ----
