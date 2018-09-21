@@ -1,13 +1,16 @@
 Alfred Safari History Search
 =================
 
-Search Safari browse history from Alfred. Support Sierra and High Sierra. (Earlier os untested)
+Search Safari browse history from Alfred. Support Sierra, High Sierra adn Mojave. (Earlier os untested)
 
 Demo
 ----
 
 ![][demo]
 
+Note for MacOS 10.14 Mojave users
+---------------------------------
+If you got the `unable to open database file` error, go to `System Preferences > Security & Privacy > Full Disk Access` and give `Alfred 3.app` permission to access Safari data :)
 
 Download
 --------
