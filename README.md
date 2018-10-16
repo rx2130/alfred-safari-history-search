@@ -10,7 +10,7 @@ Demo
 
 Note for MacOS 10.14 Mojave users
 ---------------------------------
-If you got the `unable to open database file` error, go to `System Preferences > Security & Privacy > Full Disk Access` and give `Alfred 3.app` permission to access Safari data :)
+If you got the `unable to open database file` error, go to `System Preferences > Security & Privacy > Privacy > Full Disk Access` and give `Alfred 3.app` permission to access Safari data :)
 
 Download
 --------
